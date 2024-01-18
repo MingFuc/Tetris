@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class GameBoard : Singleton<GameBoard>
+public class GameBoard : MonoBehaviour
 {
 
     [SerializeField]
@@ -20,32 +20,44 @@ public class GameBoard : Singleton<GameBoard>
         {1,2,3,4 }, //S
         {1,2,3,5 }, //T
         {0,2,4,5 }, //L
-        {1,3,4,5 }  //P
+        {1,3,4,5 }  //J
     };
 
     [SerializeField]
     private float time = 0;
 
     private bool inactivePiece = true; //if this set to true it will spawn next piece
-    private bool hitTheBlock = false;
+    //private bool hitTheBlock = false;
 
     private int leftBound = 0;
     private int rightBound = 9;
 
     private float dropSpeed = 1f;
 
-    public bool[,] grid = new bool[50, 50];
+    public bool[,] grid = new bool[10, 20];
     private void Start()
     {
-        Render(Random.Range(0, 7), piece, Random.Range(0, 7));
+        Render(0, piece, Random.Range(0, 7));
+        //Render(Random.Range(0, 7), piece, Random.Range(0, 7));
+        //set all value of grid to false
+        for (int j = 0; j < 20; j++)
+        {
+            for (int i = 0; i < 10; i++)
+            {
+                grid[i, j] = false;
+            }
+        }
     }
     private void Update()
     {
         CheckCollideBlock();
-        Render(Random.Range(0, 7), piece, Random.Range(0, 7));
+        ClearLine();
+        Render(0, piece, Random.Range(0, 7));
+        //Render(Random.Range(0, 7), piece, Random.Range(0, 7));
+        FallOff();
         if (inactivePiece == false)
         {
-            FallOff();
+            //FallOff();
             if (Input.GetKeyDown(KeyCode.A))
             {
                 Move(-1, 0);
@@ -83,7 +95,10 @@ public class GameBoard : Singleton<GameBoard>
                 RightBound();
             }
             if (Input.GetKeyDown(KeyCode.S))
-                dropSpeed = 0.01f;
+            {
+                dropSpeed = 0.05f;
+                //Move(0, -1);
+            }
 
         }
     }
@@ -119,7 +134,7 @@ public class GameBoard : Singleton<GameBoard>
     void FallOff()
     {
         time += Time.deltaTime;
-        if (time > dropSpeed && inactivePiece == false )
+        if (time > dropSpeed && inactivePiece == false)
         {
             Move(0, -1);
             time = 0;
@@ -174,10 +189,8 @@ public class GameBoard : Singleton<GameBoard>
     {
         for (int i = 0; i < 4; i++)
         {
-            int xGridPos = (int)(piece[i].transform.position.x);
-            int yGridPos = (int)(piece[i].transform.position.y);
-            grid[Mathf.Abs(xGridPos), Mathf.Abs(yGridPos)] = true;
-            Debug.Log("add at " + xGridPos + yGridPos);
+            grid[Mathf.Abs((int)(piece[i].transform.position.x)), Mathf.Abs((int)(piece[i].transform.position.y))] = true;
+            //Debug.Log("add at " + xGridPos + yGridPos);
         }
     }
     void CheckCollideBlock()
@@ -191,6 +204,8 @@ public class GameBoard : Singleton<GameBoard>
                 inactivePiece = true;
                 return;
             }
+            else
+                inactivePiece = false;
         }
         //check if hit other piece
         for (int i = 0; i < 4; i++)
@@ -199,15 +214,55 @@ public class GameBoard : Singleton<GameBoard>
             int yGridPosToCheck = (int)(piece[i].transform.position.y);
             if (grid[Mathf.Abs(xGridPosToCheck), Mathf.Abs(yGridPosToCheck)] == true)
             {
-                hitTheBlock = true;
+                Move(0, 1);
+                AddGrid();
+                inactivePiece = true;
+                return;
             }
+            else
+                inactivePiece = false;
         }
-        if (hitTheBlock == true)
+    }
+    void ClearLine()
+    {
+        for (int j = 0; j < 20; j++)
         {
-            Move(0, 1);
-            AddGrid();
-            hitTheBlock = false;
-            inactivePiece = true;
+            int countBlock = 0;
+            for (int i = 0; i < 10; i++)
+            {
+                if (grid[i, j] == true)
+                {
+                    countBlock++;
+                }
+            }
+
+            if (countBlock >= 10)
+            {
+                Debug.Log("thoa man dong " + j);
+                //destroy line and move down line 
+                foreach (GameObject gob in GameObject.FindGameObjectsWithTag("Block"))
+                {
+                    if (gob.transform.position.y == -j)
+                    {
+                        grid[(int)gob.transform.position.x, j] = false;
+                        Destroy(gob.gameObject);
+                        //Debug.Log("destroy line " + j);
+                    }
+                    else if (gob.transform.position.y > -j-0.001)
+                    {
+                        grid[(int)gob.transform.position.x, Mathf.Abs((int)gob.transform.position.y)] = false;
+                        gob.transform.position += new Vector3(0, -1, 0);
+                        grid[(int)gob.transform.position.x, Mathf.Abs((int)gob.transform.position.y)] = true;
+                    }
+                    else
+                    {
+                        grid[(int)gob.transform.position.x, Mathf.Abs((int)gob.transform.position.y)] = true;
+                    }
+                }
+
+                j--; //recheck the loop in case multiple consecutive lines need to be deleted
+            }
+            countBlock = 0;
         }
     }
 }
