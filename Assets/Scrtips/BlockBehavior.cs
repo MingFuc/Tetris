@@ -18,14 +18,40 @@ public class BlockBehavior : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.A))
             {
                 MoveLeft();
+                //prevent collide from rightside
+                for (int i = 0; i < 4; i++)
+                {
+                    if (MainBoard.grid[Mathf.RoundToInt(transform.GetChild(i).position.x), Mathf.RoundToInt(transform.GetChild(i).position.y)] == 1)
+                    {
+                        MoveRight();
+                    }
+                }
             }
             if (Input.GetKeyDown(KeyCode.D))
             {
                 MoveRight();
+                //prevent collide from leftside
+                for (int i = 0; i < 4; i++)
+                {
+                    if (MainBoard.grid[Mathf.RoundToInt(transform.GetChild(i).position.x), Mathf.RoundToInt(transform.GetChild(i).position.y)] == 1)
+                    {
+                        MoveLeft();
+                    }
+                }
             }
             if (Input.GetKeyDown(KeyCode.W))
             {
                 transform.Rotate(0, 0, 90);
+                //prevent collide from rotating (stuck => go upward)
+                for (int i = 0; i < 4; i++)
+                {
+                    if (MainBoard.grid[Mathf.RoundToInt(transform.GetChild(i).position.x), Mathf.RoundToInt(transform.GetChild(i).position.y)] == 1)
+                    {
+                        //int xxx = ((int)transform.position.x - (int)transform.GetChild(i).position.x) / Mathf.Abs(((int)transform.position.x - (int)transform.GetChild(i).position.x)); // value 1 or -1
+                        gameObject.transform.Translate(new Vector3(0, 1), Space.World);
+                        i = -1; //reloop until no blocks overlap
+                    }
+                }
             }
             if (Input.GetKeyDown(KeyCode.S))
             {
@@ -61,28 +87,21 @@ public class BlockBehavior : MonoBehaviour
         //check collide with left side or right side
         for (int i = 0; i < 4; i++)
         {
-            if (transform.GetChild(i).position.x < -0.001)
+            if (transform.GetChild(i).position.x <= 1)
             {
                 MoveRight();
-                break;
+                i = -1;
+                //break;
             }
-            if (transform.GetChild(i).position.x > 9.001)
+            else if (transform.GetChild(i).position.x >= 12)
             {
                 MoveLeft();
-                break;
+                i = -1;
+                //break;
             }
         }
-        //check collide with ground
-        /*for (int i = 0; i < 4; i++)
-        {
-            if (transform.GetChild(i).position.y < 1 - 0.001)
-            {
-                AddGrid();
-                isCollide = true;
-                continueSpawn = true;
-                break;
-            }
-        }*/
+
+        //check and add grid below
         for (int i = 0; i < 4; i++)
         {
             if (MainBoard.grid[Mathf.RoundToInt(transform.GetChild(i).position.x), Mathf.RoundToInt(transform.GetChild(i).position.y)] == 1)
