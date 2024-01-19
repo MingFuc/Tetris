@@ -62,7 +62,7 @@ public class BlockBehavior : MonoBehaviour
         }
         if (isCollide == true && continueSpawn == true)
         {
-            MainBoard.instance.RandomSpawn();
+            MainBoard.clearLineAndSpawn = true;
             continueSpawn = false;
         }
     }
