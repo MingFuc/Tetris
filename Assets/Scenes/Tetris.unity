@@ -310,7 +310,7 @@ GameObject:
   - component: {fileID: 536893524}
   - component: {fileID: 536893523}
   m_Layer: 0
-  m_Name: MainBoard
+  m_Name: MainBoard Controller
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

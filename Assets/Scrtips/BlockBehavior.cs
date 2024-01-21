@@ -128,7 +128,7 @@ public class BlockBehavior : MonoBehaviour
         for (int i = 0; i < 4; i++)
         {
             MainBoard.grid[Mathf.RoundToInt(transform.GetChild(i).position.x), Mathf.RoundToInt(transform.GetChild(i).position.y)] = 1;
-            Debug.Log("add" + Mathf.RoundToInt(transform.GetChild(i).position.x) + "," + Mathf.RoundToInt(transform.GetChild(i).position.y));
+            Debug.Log("[" + Mathf.RoundToInt(transform.GetChild(i).position.x) + "," + Mathf.RoundToInt(transform.GetChild(i).position.y) + "]" + " = 1");
         }
     }
 }

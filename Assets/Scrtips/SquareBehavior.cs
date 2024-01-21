@@ -4,15 +4,22 @@ using UnityEngine;
 
 public class SquareBehavior : MonoBehaviour
 {
-    // Start is called before the first frame update
+    private SpriteRenderer sr;
+
     void Start()
     {
-        
+        sr = GetComponent<SpriteRenderer>();
     }
 
-    // Update is called once per frame
     void Update()
     {
-        
+        //DisplayInGrid();
+    }
+    void DisplayInGrid()
+    {
+        if (transform.position.y > MainBoard.instance.topBoundary)
+        {
+            sr.sortingOrder = -1;
+        }
     }
 }
