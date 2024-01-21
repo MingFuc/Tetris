@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
@@ -5,12 +6,12 @@ using UnityEngine;
 
 public class BlockBehavior : MonoBehaviour
 {
-    [SerializeField]
     private float time = 0;
     private float fallTime = 0.5f;
 
     private bool isCollide = false;
     private bool continueSpawn = false;
+
     private void Update()
     {
         if (isCollide == false)

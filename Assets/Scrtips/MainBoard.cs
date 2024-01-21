@@ -12,6 +12,9 @@ public class MainBoard : MonoBehaviour
     [SerializeField]
     private GameObject[] spawnBlock;
 
+    [SerializeField]
+    private GameObject[] spawnGhostBlock;
+
     private Vector3 spawnPosition = new Vector3(6, 20);
 
     [SerializeField]
@@ -22,7 +25,14 @@ public class MainBoard : MonoBehaviour
 
     public static bool clearLineAndSpawn = false;
 
-
+    public event Action onDestroyGhostBlock;
+    public void onDestroyGhostBlock_Invoke()
+    {
+        if (onDestroyGhostBlock != null)
+        {
+            onDestroyGhostBlock.Invoke();
+        }
+    }
 
     private void Awake()
     {
@@ -51,6 +61,7 @@ public class MainBoard : MonoBehaviour
     {
         if (clearLineAndSpawn == true)
         {
+            onDestroyGhostBlock_Invoke();
             ClearLine();
             RandomSpawn();
             clearLineAndSpawn = false;
@@ -90,6 +101,7 @@ public class MainBoard : MonoBehaviour
         else                                                 //O
             offset_2 = new Vector2(0, 0);
         Instantiate(spawnBlock[i], spawnPosition + offset_1 + offset_2, Quaternion.Euler(0, 0, spawnRotation[j]));
+        Instantiate(spawnGhostBlock[i], spawnPosition + offset_1 + offset_2, Quaternion.Euler(0, 0, spawnRotation[j]));
     }
     public void ClearLine()
     {
