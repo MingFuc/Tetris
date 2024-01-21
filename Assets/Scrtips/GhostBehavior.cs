@@ -21,6 +21,19 @@ public class GhostBehavior : MonoBehaviour
     }
     private void Update()
     {
+        //sync norm and ghost
+        if (MainBoard.leftBlocked == true)
+        {
+            MoveRight();
+            MainBoard.leftBlocked = false;
+        }
+        if (MainBoard.rightBlocked == true)
+        {
+            MoveLeft();
+            MainBoard.rightBlocked = false;
+        }
+        //
+
         if (isCollide == false)
         {
             FallDown();
@@ -29,6 +42,11 @@ public class GhostBehavior : MonoBehaviour
         {
             isCollide = false;
             MoveLeft();
+
+            while (MainBoard.instance.CheckVertically() == true)
+            {
+                gameObject.transform.Translate(new Vector2(0, MainBoard.ghostMoveUpRange), Space.World);
+            }
             //prevent collide from rightside
             //for (int i = 0; i < 4; i++)
             //{
@@ -42,6 +60,12 @@ public class GhostBehavior : MonoBehaviour
         {
             isCollide = false;
             MoveRight();
+
+            //MainBoard.instance.CheckHorizontally();
+            while (MainBoard.instance.CheckVertically() == true)
+            {
+                gameObject.transform.Translate(new Vector2(0, MainBoard.ghostMoveUpRange), Space.World);
+            }
             //prevent collide from leftside
             //for (int i = 0; i < 4; i++)
             //{
@@ -111,7 +135,7 @@ public class GhostBehavior : MonoBehaviour
                 //break;
             }
         }
-        //check and add grid below
+        //check grid below
         for (int i = 0; i < 4; i++)
         {
             if (MainBoard.grid[Mathf.RoundToInt(transform.GetChild(i).position.x), Mathf.RoundToInt(transform.GetChild(i).position.y)] == 1)

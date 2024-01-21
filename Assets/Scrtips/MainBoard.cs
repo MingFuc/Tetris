@@ -10,10 +10,13 @@ public class MainBoard : MonoBehaviour
     public static MainBoard instance;
 
     [SerializeField]
-    private GameObject[] spawnBlock;
+    private GameObject[] spawnBlocks;
 
     [SerializeField]
-    private GameObject[] spawnGhostBlock;
+    private GameObject[] spawnGhostBlocks;
+
+    private GameObject spawned_Block;
+    private GameObject spawned_GhostBlock;
 
     private Vector3 spawnPosition = new Vector3(6, 20);
 
@@ -24,6 +27,11 @@ public class MainBoard : MonoBehaviour
     public static int[,] grid = new int[14, 22 + 2];
 
     public static bool clearLineAndSpawn = false;
+
+    public static int ghostMoveUpRange = 0;
+
+    public static bool leftBlocked = false;
+    public static bool rightBlocked = false;
 
     public event Action onDestroyGhostBlock;
     public void onDestroyGhostBlock_Invoke()
@@ -100,8 +108,8 @@ public class MainBoard : MonoBehaviour
         }
         else                                                 //O
             offset_2 = new Vector2(0, 0);
-        Instantiate(spawnBlock[i], spawnPosition + offset_1 + offset_2, Quaternion.Euler(0, 0, spawnRotation[j]));
-        Instantiate(spawnGhostBlock[i], spawnPosition + offset_1 + offset_2, Quaternion.Euler(0, 0, spawnRotation[j]));
+        spawned_Block = Instantiate(spawnBlocks[i], spawnPosition + offset_1 + offset_2, Quaternion.Euler(0, 0, spawnRotation[j]));
+        spawned_GhostBlock = Instantiate(spawnGhostBlocks[i], spawnPosition + offset_1 + offset_2, Quaternion.Euler(0, 0, spawnRotation[j]));
     }
     public void ClearLine()
     {
@@ -157,5 +165,27 @@ public class MainBoard : MonoBehaviour
             }
             valueSum = 0;
         }
+    }
+    public bool CheckVertically() //between ghost block and normal block,  have a block ? ==> ghost block move up (like it should) 
+    {
+        for (int i = 0; i < 4; i++)
+        {
+            int block_yPos = Mathf.RoundToInt(spawned_Block.transform.GetChild(i).position.y);
+            int ghostBlock_yPos = Mathf.RoundToInt(spawned_GhostBlock.transform.GetChild(i).position.y);
+
+            int stepNumber = 1;
+            do
+            {
+                if (grid[Mathf.RoundToInt(spawned_GhostBlock.transform.GetChild(i).position.x),
+                    ghostBlock_yPos + Mathf.RoundToInt(stepNumber)] == 1)
+                {
+                    ghostMoveUpRange = stepNumber;
+                    return true;
+                }
+                stepNumber++;
+            }
+            while (ghostBlock_yPos + stepNumber < block_yPos);
+        }
+        return false;
     }
 }

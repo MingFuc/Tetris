@@ -25,6 +25,7 @@ public class BlockBehavior : MonoBehaviour
                     if (MainBoard.grid[Mathf.RoundToInt(transform.GetChild(i).position.x), Mathf.RoundToInt(transform.GetChild(i).position.y)] == 1)
                     {
                         MoveRight();
+                        MainBoard.leftBlocked = true;
                     }
                 }
             }
@@ -37,6 +38,7 @@ public class BlockBehavior : MonoBehaviour
                     if (MainBoard.grid[Mathf.RoundToInt(transform.GetChild(i).position.x), Mathf.RoundToInt(transform.GetChild(i).position.y)] == 1)
                     {
                         MoveLeft();
+                        MainBoard.rightBlocked = true;
                     }
                 }
             }
@@ -53,6 +55,10 @@ public class BlockBehavior : MonoBehaviour
                         i = -1; //reloop until no blocks overlap
                     }
                 }
+            }
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                fallTime = 0.005f;
             }
             if (Input.GetKeyDown(KeyCode.S))
             {
