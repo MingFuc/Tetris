@@ -7,10 +7,18 @@ using UnityEngine;
 public class BlockBehavior : MonoBehaviour
 {
     private float time = 0;
-    private float fallTime = 0.5f;
+    private float fallTime;
 
     private bool isCollide = false;
     private bool continueSpawn = false;
+    private bool isHoldingS_Key = false; // if player keeps holding S => it wont affect new piece's fall time  
+
+
+
+    private void Awake()
+    {
+        fallTime = MainBoard.instance.fallTime;
+    }
 
     private void Update()
     {
@@ -22,10 +30,10 @@ public class BlockBehavior : MonoBehaviour
                 //prevent collide from rightside
                 for (int i = 0; i < 4; i++)
                 {
-                    if (MainBoard.grid[Mathf.RoundToInt(transform.GetChild(i).position.x), Mathf.RoundToInt(transform.GetChild(i).position.y)] == 1)
+                    if (MainBoard.instance.grid[Mathf.RoundToInt(transform.GetChild(i).position.x), Mathf.RoundToInt(transform.GetChild(i).position.y)] == 1)
                     {
                         MoveRight();
-                        MainBoard.leftBlocked = true;
+                        MainBoard.instance.leftBlocked = true;
                     }
                 }
             }
@@ -35,10 +43,10 @@ public class BlockBehavior : MonoBehaviour
                 //prevent collide from leftside
                 for (int i = 0; i < 4; i++)
                 {
-                    if (MainBoard.grid[Mathf.RoundToInt(transform.GetChild(i).position.x), Mathf.RoundToInt(transform.GetChild(i).position.y)] == 1)
+                    if (MainBoard.instance.grid[Mathf.RoundToInt(transform.GetChild(i).position.x), Mathf.RoundToInt(transform.GetChild(i).position.y)] == 1)
                     {
                         MoveLeft();
-                        MainBoard.rightBlocked = true;
+                        MainBoard.instance.rightBlocked = true;
                     }
                 }
             }
@@ -48,28 +56,34 @@ public class BlockBehavior : MonoBehaviour
                 //prevent collide from rotating (stuck => go upward)
                 for (int i = 0; i < 4; i++)
                 {
-                    if (MainBoard.grid[Mathf.RoundToInt(transform.GetChild(i).position.x), Mathf.RoundToInt(transform.GetChild(i).position.y)] == 1)
+                    if (MainBoard.instance.grid[Mathf.RoundToInt(transform.GetChild(i).position.x), Mathf.RoundToInt(transform.GetChild(i).position.y)] == 1)
                     {
-                        //int xxx = ((int)transform.position.x - (int)transform.GetChild(i).position.x) / Mathf.Abs(((int)transform.position.x - (int)transform.GetChild(i).position.x)); // value 1 or -1
+                        
                         gameObject.transform.Translate(new Vector3(0, 1), Space.World);
                         i = -1; //reloop until no blocks overlap
+
                     }
                 }
             }
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                fallTime = 0.005f;
-            }
+
+            //HardDrop();
+            
             if (Input.GetKeyDown(KeyCode.S))
             {
-                fallTime = 0.05f;
+                fallTime = fallTime / 10;
+                isHoldingS_Key = true;
+            }
+            if (Input.GetKeyUp(KeyCode.S) && isHoldingS_Key == true) //if previously held the S button
+            {
+                fallTime = fallTime * 10;
+                isHoldingS_Key = false;
             }
             FallDown();
             CheckBound();
         }
         if (isCollide == true && continueSpawn == true)
         {
-            MainBoard.clearLineAndSpawn = true;
+            MainBoard.instance.clearLineAndSpawn = true;
             continueSpawn = false;
         }
     }
@@ -89,6 +103,27 @@ public class BlockBehavior : MonoBehaviour
     {
         gameObject.transform.Translate(new Vector2(1, 0), Space.World);
     }
+
+    void HardDrop()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            do
+            {
+                gameObject.transform.Translate(new Vector2(0, -1), Space.World);
+                for (int i = 0; i < 4; i++)
+                {
+                    if (MainBoard.instance.grid[Mathf.RoundToInt(transform.GetChild(i).position.x), Mathf.RoundToInt(transform.GetChild(i).position.y)] == 1)
+                    {
+                        gameObject.transform.Translate(new Vector2(0, 1), Space.World);
+                        return;
+                    }
+
+                }
+            }
+            while (true);
+        }
+    }
     void CheckBound()
     {
         //check collide with left side or right side
@@ -98,20 +133,20 @@ public class BlockBehavior : MonoBehaviour
             {
                 MoveRight();
                 i = -1;
-                //break;
+                
             }
             else if (transform.GetChild(i).position.x >= 12)
             {
                 MoveLeft();
                 i = -1;
-                //break;
+                
             }
         }
 
         //check and add grid below
         for (int i = 0; i < 4; i++)
         {
-            if (MainBoard.grid[Mathf.RoundToInt(transform.GetChild(i).position.x), Mathf.RoundToInt(transform.GetChild(i).position.y)] == 1)
+            if (MainBoard.instance.grid[Mathf.RoundToInt(transform.GetChild(i).position.x), Mathf.RoundToInt(transform.GetChild(i).position.y)] == 1)
             {
                 MoveUp();
                 AddGrid();
@@ -134,8 +169,8 @@ public class BlockBehavior : MonoBehaviour
     {
         for (int i = 0; i < 4; i++)
         {
-            MainBoard.grid[Mathf.RoundToInt(transform.GetChild(i).position.x), Mathf.RoundToInt(transform.GetChild(i).position.y)] = 1;
-            Debug.Log("[" + Mathf.RoundToInt(transform.GetChild(i).position.x) + "," + Mathf.RoundToInt(transform.GetChild(i).position.y) + "]" + " = 1");
+            MainBoard.instance.grid[Mathf.RoundToInt(transform.GetChild(i).position.x), Mathf.RoundToInt(transform.GetChild(i).position.y)] = 1;
+            
         }
     }
 }

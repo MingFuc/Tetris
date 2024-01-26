@@ -96,6 +96,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4422317966250469720, guid: 74bb2c9cf0beff74181aa3b7d12d17ca, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6351843143549415867, guid: 74bb2c9cf0beff74181aa3b7d12d17ca, type: 3}
       propertyPath: m_Name
       value: LightBlue Block (3)
@@ -164,6 +168,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4416236599971220923, guid: 74bb2c9cf0beff74181aa3b7d12d17ca, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4422317966250469720, guid: 74bb2c9cf0beff74181aa3b7d12d17ca, type: 3}
+      propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6351843143549415867, guid: 74bb2c9cf0beff74181aa3b7d12d17ca, type: 3}
@@ -236,6 +244,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4422317966250469720, guid: 74bb2c9cf0beff74181aa3b7d12d17ca, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6351843143549415867, guid: 74bb2c9cf0beff74181aa3b7d12d17ca, type: 3}
       propertyPath: m_Name
       value: LightBlue Block (2)
@@ -304,6 +316,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4416236599971220923, guid: 74bb2c9cf0beff74181aa3b7d12d17ca, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4422317966250469720, guid: 74bb2c9cf0beff74181aa3b7d12d17ca, type: 3}
+      propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6351843143549415867, guid: 74bb2c9cf0beff74181aa3b7d12d17ca, type: 3}

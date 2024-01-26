@@ -1,25 +1,44 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Animations;
 using UnityEngine;
 
 public class SquareBehavior : MonoBehaviour
 {
     private SpriteRenderer sr;
 
-    void Start()
+
+
+    void Awake()
     {
         sr = GetComponent<SpriteRenderer>();
+      
     }
 
     void Update()
     {
-        //DisplayInGrid();
+        DisplayInGrid();
+        CheckGameState();
     }
     void DisplayInGrid()
     {
-        if (transform.position.y > MainBoard.instance.topBoundary)
+        if (transform.position.y >= MainBoard.instance.topBoundary)
         {
-            sr.sortingOrder = -1;
+            if (MainBoard.instance.isGameOver == true)
+                gameObject.SetActive(false);
+            else
+            {
+                sr.sortingOrder = -3;
+            }
+        }
+        else
+            sr.sortingOrder = 2;
+    }
+    void CheckGameState()
+    {
+        if (MainBoard.instance.clearLineAndSpawn == true && Mathf.RoundToInt(gameObject.transform.position.y) >= MainBoard.instance.topBoundary)
+        {
+            MainBoard.instance.isGameOver = true;
         }
     }
 }

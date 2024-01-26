@@ -100,6 +100,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Red Block  (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 4140548440333674063, guid: b134ad8677b79a14da1dcd8093007e46, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4211568761838935594, guid: b134ad8677b79a14da1dcd8093007e46, type: 3}
       propertyPath: m_Sprite
       value: 
@@ -169,6 +173,10 @@ PrefabInstance:
     - target: {fileID: 3117754611090292789, guid: b134ad8677b79a14da1dcd8093007e46, type: 3}
       propertyPath: m_Name
       value: Red Block  (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4140548440333674063, guid: b134ad8677b79a14da1dcd8093007e46, type: 3}
+      propertyPath: m_Enabled
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4211568761838935594, guid: b134ad8677b79a14da1dcd8093007e46, type: 3}
       propertyPath: m_Sprite
@@ -240,6 +248,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Red Block  (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 4140548440333674063, guid: b134ad8677b79a14da1dcd8093007e46, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4211568761838935594, guid: b134ad8677b79a14da1dcd8093007e46, type: 3}
       propertyPath: m_Sprite
       value: 
@@ -309,6 +321,10 @@ PrefabInstance:
     - target: {fileID: 3117754611090292789, guid: b134ad8677b79a14da1dcd8093007e46, type: 3}
       propertyPath: m_Name
       value: 'Red Block '
+      objectReference: {fileID: 0}
+    - target: {fileID: 4140548440333674063, guid: b134ad8677b79a14da1dcd8093007e46, type: 3}
+      propertyPath: m_Enabled
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4211568761838935594, guid: b134ad8677b79a14da1dcd8093007e46, type: 3}
       propertyPath: m_Sprite
