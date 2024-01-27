@@ -127,13 +127,13 @@ public class GhostBehavior : MonoBehaviour
         //check collide with left side or right side
         for (int i = 0; i < 4; i++)
         {
-            if (transform.GetChild(i).position.x <= 1)
+            if (Mathf.RoundToInt(transform.GetChild(i).position.x) < 2)
             {
                 MoveRight();
                 i = -1;
 
             }
-            else if (transform.GetChild(i).position.x >= 12)
+            else if (Mathf.RoundToInt(transform.GetChild(i).position.x) > 11)
             {
                 MoveLeft();
                 i = -1;

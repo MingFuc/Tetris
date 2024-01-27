@@ -39,6 +39,7 @@ public class MainBoard : MonoBehaviour
     [SerializeField]
     private float[] spawnRotation = new float[4] { 0, 90, 180, 270 };
     public int topBoundary { get; private set; } = 22;
+    
 
     public int[,] grid = new int[14, 22 + 2];
 
@@ -253,6 +254,8 @@ public class MainBoard : MonoBehaviour
             }
             if (valueSum >= 10) //if line is full
             {
+                SoundManager.instance.PlayClearLineSound();
+
                 for (int i = 2; i < 12; i++)
                 {
                     Instantiate(ImageOfDestroyedBlock, new Vector3(i, j + offset), Quaternion.identity);
@@ -301,7 +304,7 @@ public class MainBoard : MonoBehaviour
                     }
                 }
 
-
+                
 
                 scores += level;
 
