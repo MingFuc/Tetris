@@ -39,6 +39,7 @@ public class SquareBehavior : MonoBehaviour
         if (MainBoard.instance.clearLineAndSpawn == true && Mathf.RoundToInt(gameObject.transform.position.y) >= MainBoard.instance.topBoundary)
         {
             MainBoard.instance.isGameOver = true;
+            MainBoard.instance.onLose_Invoke();
         }
     }
 }

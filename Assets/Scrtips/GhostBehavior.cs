@@ -14,78 +14,81 @@ public class GhostBehavior : MonoBehaviour
     }
 
 
-  
+
     private void OnDestroy()
     {
         MainBoard.instance.onDestroyGhostBlock -= DestroyThis;
     }
     private void Update()
     {
-        if (!MainBoard.instance.isGameOver)
+        if (MainBoard.instance.isGamePaused == false)
         {
-            //sync norm and ghost
-            if (MainBoard.instance.leftBlocked == true)
+            if (MainBoard.instance.isGameOver == false)
             {
-                MoveRight();
-                MainBoard.instance.leftBlocked = false;
-            }
-            if (MainBoard.instance.rightBlocked == true)
-            {
-                MoveLeft();
-                MainBoard.instance.rightBlocked = false;
-            }
-            //
-
-            if (isCollide == false)
-            {
-                FallDown();
-            }
-            if (Input.GetKeyDown(KeyCode.A))
-            {
-                isCollide = false;
-                MoveLeft();
-
-                while (MainBoard.instance.CheckVertically() == true)
+                //sync norm and ghost
+                if (MainBoard.instance.leftBlocked == true)
                 {
-                    gameObject.transform.Translate(new Vector2(0, MainBoard.instance.ghostMoveUpRange), Space.World);
+                    MoveRight();
+                    MainBoard.instance.leftBlocked = false;
                 }
-
-            }
-            if (Input.GetKeyDown(KeyCode.D))
-            {
-                isCollide = false;
-                MoveRight();
-
-
-                while (MainBoard.instance.CheckVertically() == true)
+                if (MainBoard.instance.rightBlocked == true)
                 {
-                    gameObject.transform.Translate(new Vector2(0, MainBoard.instance.ghostMoveUpRange), Space.World);
+                    MoveLeft();
+                    MainBoard.instance.rightBlocked = false;
                 }
+                //
 
-            }
-            if (Input.GetKeyDown(KeyCode.W))
-            {
-                isCollide = false;
-                transform.Rotate(0, 0, 90);
-                while (MainBoard.instance.CheckVertically() == true)
+                if (isCollide == false)
                 {
-                    gameObject.transform.Translate(new Vector2(0, MainBoard.instance.ghostMoveUpRange), Space.World);
+                    FallDown();
                 }
-                //prevent collide from rotating (stuck => go upward)
-                for (int i = 0; i < 4; i++)
+                if (Input.GetKeyDown(KeyCode.A))
                 {
-                    if (MainBoard.instance.grid[Mathf.RoundToInt(transform.GetChild(i).position.x), Mathf.RoundToInt(transform.GetChild(i).position.y)] == 1)
+                    isCollide = false;
+                    MoveLeft();
+
+                    while (MainBoard.instance.CheckVertically() == true)
                     {
+                        gameObject.transform.Translate(new Vector2(0, MainBoard.instance.ghostMoveUpRange), Space.World);
+                    }
 
-                        gameObject.transform.Translate(new Vector3(0, 1), Space.World);
-                        i = -1; //reloop until no blocks overlap
+                }
+                if (Input.GetKeyDown(KeyCode.D))
+                {
+                    isCollide = false;
+                    MoveRight();
+
+
+                    while (MainBoard.instance.CheckVertically() == true)
+                    {
+                        gameObject.transform.Translate(new Vector2(0, MainBoard.instance.ghostMoveUpRange), Space.World);
+                    }
+
+                }
+                if (Input.GetKeyDown(KeyCode.W))
+                {
+                    isCollide = false;
+                    transform.Rotate(0, 0, 90);
+                    while (MainBoard.instance.CheckVertically() == true)
+                    {
+                        gameObject.transform.Translate(new Vector2(0, MainBoard.instance.ghostMoveUpRange), Space.World);
+                    }
+                    //prevent collide from rotating (stuck => go upward)
+                    for (int i = 0; i < 4; i++)
+                    {
+                        if (MainBoard.instance.grid[Mathf.RoundToInt(transform.GetChild(i).position.x), Mathf.RoundToInt(transform.GetChild(i).position.y)] == 1)
+                        {
+
+                            gameObject.transform.Translate(new Vector3(0, 1), Space.World);
+                            i = -1; //reloop until no blocks overlap
+                        }
                     }
                 }
+                CheckBound();
             }
-            CheckBound();
+            else
+                DestroyThis();
         }
-        else
-            DestroyThis();
     }
     void FallDown()
     {

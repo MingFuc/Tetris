@@ -22,69 +22,72 @@ public class BlockBehavior : MonoBehaviour
 
     private void Update()
     {
-        if (isCollide == false)
+        if (MainBoard.instance.isGamePaused == false)
         {
-            if (Input.GetKeyDown(KeyCode.A))
+            if (isCollide == false)
             {
-                MoveLeft();
-                //prevent collide from rightside
-                for (int i = 0; i < 4; i++)
+                if (Input.GetKeyDown(KeyCode.A))
                 {
-                    if (MainBoard.instance.grid[Mathf.RoundToInt(transform.GetChild(i).position.x), Mathf.RoundToInt(transform.GetChild(i).position.y)] == 1)
+                    MoveLeft();
+                    //prevent collide from rightside
+                    for (int i = 0; i < 4; i++)
                     {
-                        MoveRight();
-                        MainBoard.instance.leftBlocked = true;
+                        if (MainBoard.instance.grid[Mathf.RoundToInt(transform.GetChild(i).position.x), Mathf.RoundToInt(transform.GetChild(i).position.y)] == 1)
+                        {
+                            MoveRight();
+                            MainBoard.instance.leftBlocked = true;
+                        }
                     }
                 }
-            }
-            if (Input.GetKeyDown(KeyCode.D))
-            {
-                MoveRight();
-                //prevent collide from leftside
-                for (int i = 0; i < 4; i++)
+                if (Input.GetKeyDown(KeyCode.D))
                 {
-                    if (MainBoard.instance.grid[Mathf.RoundToInt(transform.GetChild(i).position.x), Mathf.RoundToInt(transform.GetChild(i).position.y)] == 1)
+                    MoveRight();
+                    //prevent collide from leftside
+                    for (int i = 0; i < 4; i++)
                     {
-                        MoveLeft();
-                        MainBoard.instance.rightBlocked = true;
+                        if (MainBoard.instance.grid[Mathf.RoundToInt(transform.GetChild(i).position.x), Mathf.RoundToInt(transform.GetChild(i).position.y)] == 1)
+                        {
+                            MoveLeft();
+                            MainBoard.instance.rightBlocked = true;
+                        }
                     }
                 }
-            }
-            if (Input.GetKeyDown(KeyCode.W))
-            {
-                transform.Rotate(0, 0, 90);
-                //prevent collide from rotating (stuck => go upward)
-                for (int i = 0; i < 4; i++)
+                if (Input.GetKeyDown(KeyCode.W))
                 {
-                    if (MainBoard.instance.grid[Mathf.RoundToInt(transform.GetChild(i).position.x), Mathf.RoundToInt(transform.GetChild(i).position.y)] == 1)
+                    transform.Rotate(0, 0, 90);
+                    //prevent collide from rotating (stuck => go upward)
+                    for (int i = 0; i < 4; i++)
                     {
-                        
-                        gameObject.transform.Translate(new Vector3(0, 1), Space.World);
-                        i = -1; //reloop until no blocks overlap
+                        if (MainBoard.instance.grid[Mathf.RoundToInt(transform.GetChild(i).position.x), Mathf.RoundToInt(transform.GetChild(i).position.y)] == 1)
+                        {
 
+                            gameObject.transform.Translate(new Vector3(0, 1), Space.World);
+                            i = -1; //reloop until no blocks overlap
+
+                        }
                     }
                 }
-            }
 
-            //HardDrop();
-            
-            if (Input.GetKeyDown(KeyCode.S))
-            {
-                fallTime = fallTime / 10;
-                isHoldingS_Key = true;
+                //HardDrop();
+
+                if (Input.GetKeyDown(KeyCode.S))
+                {
+                    fallTime = fallTime / 10;
+                    isHoldingS_Key = true;
+                }
+                if (Input.GetKeyUp(KeyCode.S) && isHoldingS_Key == true) //if previously held the S button
+                {
+                    fallTime = fallTime * 10;
+                    isHoldingS_Key = false;
+                }
+                FallDown();
+                CheckBound();
             }
-            if (Input.GetKeyUp(KeyCode.S) && isHoldingS_Key == true) //if previously held the S button
+            if (isCollide == true && continueSpawn == true)
             {
-                fallTime = fallTime * 10;
-                isHoldingS_Key = false;
+                MainBoard.instance.clearLineAndSpawn = true;
+                continueSpawn = false;
             }
-            FallDown();
-            CheckBound();
-        }
-        if (isCollide == true && continueSpawn == true)
-        {
-            MainBoard.instance.clearLineAndSpawn = true;
-            continueSpawn = false;
         }
     }
     void MoveUp()

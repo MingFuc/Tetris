@@ -61,7 +61,9 @@ public class MainBoard : MonoBehaviour
     private float time = 0;
 
 
-
+    public bool isGamePaused = false;
+    [SerializeField]
+    private GameObject pauseArea;
 
     public event Action onDestroyGhostBlock;
     public void onDestroyGhostBlock_Invoke()
@@ -69,6 +71,24 @@ public class MainBoard : MonoBehaviour
         if (onDestroyGhostBlock != null)
         {
             onDestroyGhostBlock.Invoke();
+        }
+    }
+
+    public event Action onPause;
+    public void onPause_Invoke()
+    {
+        if (onPause != null)
+        {
+            onPause.Invoke();
+        }
+    }
+
+    public event Action onLose;
+    public void onLose_Invoke()
+    {
+        if (onLose != null)
+        {
+            onLose.Invoke();
         }
     }
 
@@ -120,12 +140,19 @@ public class MainBoard : MonoBehaviour
             IncomingSpawn();
             clearLineAndSpawn = false;
         }
+
+        if (Input.GetKeyDown(KeyCode.Q) && !isGameOver)
+        {
+            onPause_Invoke();
+            ChangeGameState();
+        }
     }
 
     private void LateUpdate()
     {
         if (isGameOver)
         {
+
             replayArea.SetActive(true);
             if (Input.GetKeyDown(KeyCode.R))
             {
@@ -342,5 +369,19 @@ public class MainBoard : MonoBehaviour
         return false;
     }
 
+    void ChangeGameState()
+    {
+        if (isGamePaused == false)
+        {
+            Time.timeScale = 0;
+            pauseArea.SetActive(true);
+        }
+        else
+        {
+            Time.timeScale = 1;
+            pauseArea.SetActive(false);
+        }
+        isGamePaused = !isGamePaused;
+    }
 
 }
