@@ -8,7 +8,7 @@ public class SoundManager : MonoBehaviour
 
     public static SoundManager instance;
 
-    public static bool BackgroundSound = true;
+    public static bool BackgroundSound = false;
     public static bool EffectSound = true;
 
     public Toggle BMToggle;

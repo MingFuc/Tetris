@@ -7,10 +7,19 @@ public class GhostBehavior : MonoBehaviour
 
     private bool isCollide = false;
 
+   
+
     private void Awake()
     {
         MainBoard.instance.onDestroyGhostBlock += DestroyThis;
 
+
+
+        //MainBoard.instance.LeftButton.onClick?.AddListener(LeftButton);
+        //MainBoard.instance.RightButton.onClick?.AddListener(RightButton);
+
+        //MainBoard.instance.LeftButton.clicked += LeftButton;
+        //MainBoard.instance.RightButton.clicked += RightButton;
     }
 
 
@@ -21,6 +30,8 @@ public class GhostBehavior : MonoBehaviour
     }
     private void Update()
     {
+       
+
         if (MainBoard.instance.isGamePaused == false)
         {
             if (MainBoard.instance.isGameOver == false)
@@ -42,7 +53,7 @@ public class GhostBehavior : MonoBehaviour
                 {
                     FallDown();
                 }
-                if (Input.GetKeyDown(KeyCode.A))
+                if (Input.GetKeyDown(KeyCode.A) || MainBoard.instance.leftButtonClicked == true)
                 {
                     isCollide = false;
                     MoveLeft();
@@ -52,8 +63,10 @@ public class GhostBehavior : MonoBehaviour
                         gameObject.transform.Translate(new Vector2(0, MainBoard.instance.ghostMoveUpRange), Space.World);
                     }
 
+                    MainBoard.instance.leftButtonClicked = false;
+
                 }
-                if (Input.GetKeyDown(KeyCode.D))
+                if (Input.GetKeyDown(KeyCode.D) || MainBoard.instance.rightButtonClicked == true)
                 {
                     isCollide = false;
                     MoveRight();
@@ -63,6 +76,8 @@ public class GhostBehavior : MonoBehaviour
                     {
                         gameObject.transform.Translate(new Vector2(0, MainBoard.instance.ghostMoveUpRange), Space.World);
                     }
+
+                    MainBoard.instance.rightButtonClicked = false;
 
                 }
                 if (Input.GetKeyDown(KeyCode.W))
@@ -158,4 +173,37 @@ public class GhostBehavior : MonoBehaviour
     {
         gameObject.SetActive(false);
     }
+
+    //void LeftButton()
+    //{
+    //    if (!MainBoard.instance.isGamePaused == false)
+    //        return;
+    //    if (!MainBoard.instance.isGameOver == false)
+    //        return;
+
+    //    isCollide = false;
+    //    MoveLeft();
+
+    //    while (MainBoard.instance.CheckVertically() == true)
+    //    {
+    //        gameObject.transform.Translate(new Vector2(0, MainBoard.instance.ghostMoveUpRange), Space.World);
+    //    }
+    //}
+
+    //void RightButton()
+    //{
+    //    if (!MainBoard.instance.isGamePaused == false)
+    //        return;
+    //    if (!MainBoard.instance.isGameOver == false)
+    //        return;
+
+    //    isCollide = false;
+    //    MoveRight();
+
+
+    //    while (MainBoard.instance.CheckVertically() == true)
+    //    {
+    //        gameObject.transform.Translate(new Vector2(0, MainBoard.instance.ghostMoveUpRange), Space.World);
+    //    }
+    //}
 }

@@ -7,6 +7,8 @@ using UnityEditor.Animations;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+
 
 public class MainBoard : MonoBehaviour
 {
@@ -19,10 +21,8 @@ public class MainBoard : MonoBehaviour
     private GameObject[] spawnGhostBlocksArray;
 
     private GameObject spawned_Block;
-    [SerializeField]
     private GameObject spawned_GhostBlock;
     private GameObject incoming_Spawned_Block;
-    [SerializeField]
     private GameObject incoming_Spawned_Ghost_Block;
     private GameObject image_Of_Incoming_Spawned_Block;
 
@@ -35,6 +35,7 @@ public class MainBoard : MonoBehaviour
     public Sprite[] colorSpawn = new Sprite[7];
 
     private Vector3 spawnPosition = new Vector3(6, 20);
+    private Vector3 imagePosition = new Vector3(15, 18);
 
     [SerializeField]
     private float[] spawnRotation = new float[4] { 0, 90, 180, 270 };
@@ -54,6 +55,18 @@ public class MainBoard : MonoBehaviour
 
     public TextMeshProUGUI tmp1;
     public TextMeshProUGUI tmp2;
+
+    //public Button LeftButton;
+    //public Button RightButton;
+
+    public bool leftButtonClicked = false;
+    public bool rightButtonClicked = false;
+
+    public bool dropButtonDown = false;
+    public bool dropButtonUp = false;
+
+
+
     public float fallTime { get; private set; } = 0.5f;
     private int level = 1;
     private int scores = 0;
@@ -92,6 +105,24 @@ public class MainBoard : MonoBehaviour
         }
     }
 
+    //public event Action leftButtonEvent;
+    //public void onLeftButton_Invoke()
+    //{
+    //    leftButtonEvent?.Invoke();
+    //}
+
+    //public event Action rightButtonEvent;
+    //public void onRightButton_Invoke()
+    //{
+    //    rightButtonEvent?.Invoke();
+    //}
+
+    //public event Action dropButtonEvent;
+    //public void onDropButton_Invoke()
+    //{
+    //    dropButtonEvent?.Invoke();
+    //}
+
     private void Awake()
     {
         instance = this;
@@ -100,7 +131,7 @@ public class MainBoard : MonoBehaviour
     private void Start()
     {
         tmp1.text = scores.ToString();
-        tmp2.text = "Level: " + level.ToString();
+        tmp2.text = level.ToString();
         //set up grid
         for (int j = 2; j < 22 + 2; j++)
         {
@@ -135,7 +166,7 @@ public class MainBoard : MonoBehaviour
             onDestroyGhostBlock_Invoke();
             ClearLine();
             tmp1.text = scores.ToString();
-            tmp2.text = "Level: " + level.ToString();
+            tmp2.text = level.ToString();
             RandomSpawn(false);
             IncomingSpawn();
             clearLineAndSpawn = false;
@@ -259,7 +290,7 @@ public class MainBoard : MonoBehaviour
             Destroy(image_Of_Incoming_Spawned_Block.gameObject);
         }
 
-        image_Of_Incoming_Spawned_Block = Instantiate(incoming_Spawned_Block, new Vector3(15, 17) + offset_1 + offse_3, Quaternion.identity);
+        image_Of_Incoming_Spawned_Block = Instantiate(incoming_Spawned_Block, imagePosition + offset_1 + offse_3, Quaternion.identity);
         image_Of_Incoming_Spawned_Block.GetComponent<BlockBehavior>().enabled = false;
         incoming_Spawned_Block.SetActive(false);
 
@@ -384,4 +415,26 @@ public class MainBoard : MonoBehaviour
         isGamePaused = !isGamePaused;
     }
 
+
+    public void LeftButtonSet()
+    {
+        leftButtonClicked = true;
+    }
+
+    public void RightButtonSet()
+    {
+        rightButtonClicked = true;
+    }
+
+    public void DropButtonDownSet()
+    {
+        dropButtonDown = true;
+    }
+
+    public void DropButtonUpSet()
+    {
+        //Debug.Log(dropButtonUp.ToString());
+        dropButtonUp = true;
+        //Debug.Log(dropButtonUp.ToString());
+    }
 }

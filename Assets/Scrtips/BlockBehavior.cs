@@ -3,9 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class BlockBehavior : MonoBehaviour
 {
+    BlockBehavior blockBehavior;
+
     private float time = 0;
     private float fallTime;
 
@@ -13,20 +16,48 @@ public class BlockBehavior : MonoBehaviour
     private bool continueSpawn = false;
     private bool isHoldingS_Key = false; // if player keeps holding S => it wont affect new piece's fall time  
 
+    private bool isHoldingDropButton = false;
+
 
 
     private void Awake()
     {
         fallTime = MainBoard.instance.fallTime;
+        blockBehavior = GetComponent<BlockBehavior>();
+
+
+
+
+        //MainBoard.instance.LeftButton.onClick.AddListener(LeftButton);
+        //MainBoard.instance.RightButton.onClick.AddListener(RightButton);
+
+        //MainBoard.instance.LeftButton.clicked += LeftButton;
+        //MainBoard.instance.RightButton.clicked += RightButton;
+
     }
+
+    //private void OnEnable()
+    //{
+    //    MainBoard.instance.leftButtonEvent += LeftButton;
+    //    MainBoard.instance.rightButtonEvent += RightButton;
+    //}
+
+    //private void OnDisable()
+    //{
+    //    MainBoard.instance.leftButtonEvent -= LeftButton;
+    //    MainBoard.instance.rightButtonEvent -= RightButton;
+    //}
 
     private void Update()
     {
+       
+
         if (MainBoard.instance.isGamePaused == false)
         {
             if (isCollide == false)
             {
-                if (Input.GetKeyDown(KeyCode.A))
+
+                if (Input.GetKeyDown(KeyCode.A) || MainBoard.instance.leftButtonClicked == true)
                 {
                     MoveLeft();
                     //prevent collide from rightside
@@ -38,8 +69,10 @@ public class BlockBehavior : MonoBehaviour
                             MainBoard.instance.leftBlocked = true;
                         }
                     }
+
+                    //MainBoard.instance.leftButtonClicked = false;
                 }
-                if (Input.GetKeyDown(KeyCode.D))
+                if (Input.GetKeyDown(KeyCode.D) || MainBoard.instance.rightButtonClicked == true)
                 {
                     MoveRight();
                     //prevent collide from leftside
@@ -51,6 +84,8 @@ public class BlockBehavior : MonoBehaviour
                             MainBoard.instance.rightBlocked = true;
                         }
                     }
+
+                    //MainBoard.instance.rightButtonClicked = false;
                 }
                 if (Input.GetKeyDown(KeyCode.W))
                 {
@@ -70,15 +105,26 @@ public class BlockBehavior : MonoBehaviour
 
                 //HardDrop();
 
-                if (Input.GetKeyDown(KeyCode.S))
+                if (Input.GetKeyDown(KeyCode.S) || MainBoard.instance.dropButtonDown == true)
                 {
+                    Debug.Log(gameObject.name + " start press " + fallTime.ToString());
                     fallTime = fallTime / 10;
                     isHoldingS_Key = true;
+
+                    isHoldingDropButton = true;
+                    MainBoard.instance.dropButtonDown = false;
+                    Debug.Log(gameObject.name + " endpress " + fallTime.ToString());
+
                 }
-                if (Input.GetKeyUp(KeyCode.S) && isHoldingS_Key == true) //if previously held the S button
+                if (((Input.GetKeyUp(KeyCode.S)) && isHoldingS_Key == true)  || (MainBoard.instance.dropButtonUp == true && isHoldingDropButton == true)) //if previously held the S button
                 {
+                    Debug.Log(gameObject.name + " start release " + fallTime.ToString());
                     fallTime = fallTime * 10;
                     isHoldingS_Key = false;
+
+                    isHoldingDropButton = false;
+                    MainBoard.instance.dropButtonUp = false;
+                    Debug.Log(gameObject.name + " end release " +fallTime.ToString());
                 }
                 FallDown();
                 CheckBound();
@@ -87,6 +133,7 @@ public class BlockBehavior : MonoBehaviour
             {
                 MainBoard.instance.clearLineAndSpawn = true;
                 continueSpawn = false;
+                blockBehavior.enabled = false;
             }
         }
     }
@@ -106,6 +153,47 @@ public class BlockBehavior : MonoBehaviour
     {
         gameObject.transform.Translate(new Vector2(1, 0), Space.World);
     }
+
+    //void LeftButton()
+    //{
+    //    if (!MainBoard.instance.isGamePaused == false)
+    //        return;
+    //    if (!isCollide == false)
+    //        return;
+
+
+    //    MoveLeft();
+    //    //prevent collide from rightside
+    //    for (int i = 0; i < 4; i++)
+    //    {
+    //        if (MainBoard.instance.grid[Mathf.RoundToInt(transform.GetChild(i).position.x), Mathf.RoundToInt(transform.GetChild(i).position.y)] == 1)
+    //        {
+    //            MoveRight();
+    //            MainBoard.instance.leftBlocked = true;
+    //        }
+    //    }
+    //}
+
+    //void RightButton()
+    //{
+    //    if (!MainBoard.instance.isGamePaused == false)
+    //        return;
+    //    if (!isCollide == false)
+    //        return;
+
+
+    //    MoveRight();
+    //    //prevent collide from leftside
+    //    for (int i = 0; i < 4; i++)
+    //    {
+    //        if (MainBoard.instance.grid[Mathf.RoundToInt(transform.GetChild(i).position.x), Mathf.RoundToInt(transform.GetChild(i).position.y)] == 1)
+    //        {
+    //            MoveLeft();
+    //            MainBoard.instance.rightBlocked = true;
+    //        }
+    //    }
+    //}
+
 
     void HardDrop()
     {
@@ -136,13 +224,13 @@ public class BlockBehavior : MonoBehaviour
             {
                 MoveRight();
                 i = -1;
-                
+
             }
             else if (Mathf.RoundToInt(transform.GetChild(i).position.x) > 11)
             {
                 MoveLeft();
                 i = -1;
-                
+
             }
         }
 
@@ -173,7 +261,7 @@ public class BlockBehavior : MonoBehaviour
         for (int i = 0; i < 4; i++)
         {
             MainBoard.instance.grid[Mathf.RoundToInt(transform.GetChild(i).position.x), Mathf.RoundToInt(transform.GetChild(i).position.y)] = 1;
-            
+
         }
     }
 }
