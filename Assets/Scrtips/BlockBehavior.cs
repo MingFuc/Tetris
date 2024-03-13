@@ -107,24 +107,24 @@ public class BlockBehavior : MonoBehaviour
 
                 if (Input.GetKeyDown(KeyCode.S) || MainBoard.instance.dropButtonDown == true)
                 {
-                    Debug.Log(gameObject.name + " start press " + fallTime.ToString());
+                    //Debug.Log(gameObject.name + " start press " + fallTime.ToString());
                     fallTime = fallTime / 10;
                     isHoldingS_Key = true;
 
                     isHoldingDropButton = true;
                     MainBoard.instance.dropButtonDown = false;
-                    Debug.Log(gameObject.name + " endpress " + fallTime.ToString());
+                    //Debug.Log(gameObject.name + " endpress " + fallTime.ToString());
 
                 }
                 if (((Input.GetKeyUp(KeyCode.S)) && isHoldingS_Key == true)  || (MainBoard.instance.dropButtonUp == true && isHoldingDropButton == true)) //if previously held the S button
                 {
-                    Debug.Log(gameObject.name + " start release " + fallTime.ToString());
+                    //Debug.Log(gameObject.name + " start release " + fallTime.ToString());
                     fallTime = fallTime * 10;
                     isHoldingS_Key = false;
 
                     isHoldingDropButton = false;
                     MainBoard.instance.dropButtonUp = false;
-                    Debug.Log(gameObject.name + " end release " +fallTime.ToString());
+                    //Debug.Log(gameObject.name + " end release " +fallTime.ToString());
                 }
                 FallDown();
                 CheckBound();
